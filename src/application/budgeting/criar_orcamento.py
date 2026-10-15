@@ -2,7 +2,9 @@ from __future__ import annotations
 from datetime import date, timedelta
 from src.domain.budgeting.budget import Budget
 from src.domain.budgeting.money import Money
+from src.domain.budgeting.cpf import CPF
 from src.infrastructure.persistence.repositories import IBudgetRepository
+from src.infrastructure.persistence.user_registry import get_user_registry
 
 
 class CriarOrcamentoUseCase:
@@ -16,6 +18,7 @@ class CriarOrcamentoUseCase:
         valor: float,
         validade_meses: int,
         user_id: str,
+        cpf: str,
     ) -> Budget:
         """
         Cria um novo orçamento.
@@ -26,6 +29,7 @@ class CriarOrcamentoUseCase:
             valor: limite do orçamento (em BRL)
             validade_meses: deve ser um de [1, 2, 3, 6, 9, 12]
             user_id: ID do usuário logado
+            cpf: CPF do usuário (será validado)
 
         Returns:
             Budget: o orçamento criado
@@ -42,7 +46,20 @@ class CriarOrcamentoUseCase:
         if not user_id or not isinstance(user_id, str):
             raise ValueError("user_id must be a non-empty string")
 
-        # 1.5 Check duplicate name per user (active or archived)
+        # 1.5 Validate CPF
+        try:
+            cpf_obj = CPF(cpf)
+            cpf_normalizado = cpf_obj.valor
+        except ValueError as exc:
+            raise ValueError(f"CPF inválido: {exc}")
+
+        # 1.6 Check if CPF is already registered to another user
+        registry = get_user_registry()
+        existing_user = registry.get_by_cpf(cpf_normalizado)
+        if existing_user and existing_user.user_id != user_id:
+            raise ValueError("CPF já cadastrado para outro usuário")
+
+        # 1.7 Check duplicate name per user (active or archived)
         if self._budget_with_same_name_exists(user_id=user_id, nome=nome.strip()):
             raise ValueError("Já existe um orçamento com este nome")
 

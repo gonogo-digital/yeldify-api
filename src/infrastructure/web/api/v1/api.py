@@ -7,6 +7,7 @@ from src.infrastructure.web.api.v1.routes.orcamentos import router as orcamentos
 from src.infrastructure.web.api.v1.routes.receitas import router as receitas_router
 from src.infrastructure.web.api.v1.routes.transacoes import router as transacoes_router
 from src.infrastructure.web.api.v1.routes.dashboard import router as dashboard_router
+from src.infrastructure.web.api.v1.routes.usuarios import router as usuarios_router
 
 
 def _maybe_seed_demo_data() -> None:
@@ -48,6 +49,7 @@ def create_app() -> FastAPI:
     app.include_router(receitas_router)
     app.include_router(transacoes_router)
     app.include_router(dashboard_router)
+    app.include_router(usuarios_router)
     _maybe_seed_demo_data()
     return app
 

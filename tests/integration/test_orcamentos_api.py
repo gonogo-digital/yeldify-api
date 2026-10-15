@@ -513,6 +513,7 @@ def test_criar_orcamento_success():
             "categoria": "Essencial",
             "valor": 1000.0,
             "validade_meses": 1,
+            "cpf": "52998224725",
         },
     )
     
@@ -562,6 +563,7 @@ def test_criar_orcamento_invalid_valor_negativo():
             "categoria": "Essencial",
             "valor": -100.0,
             "validade_meses": 1,
+            "cpf": "52998224725",
         },
     )
     assert response.status_code == 400
@@ -582,6 +584,7 @@ def test_criar_orcamento_invalid_valor_zero():
             "categoria": "Essencial",
             "valor": 0.0,
             "validade_meses": 1,
+            "cpf": "52998224725",
         },
     )
     assert response.status_code == 400
@@ -603,6 +606,7 @@ def test_criar_orcamento_invalid_validade_meses():
             "categoria": "Essencial",
             "valor": 1000.0,
             "validade_meses": 5,  # Invalid
+            "cpf": "52998224725",
         },
     )
     assert response.status_code == 400
@@ -623,6 +627,7 @@ def test_criar_orcamento_response_includes_ativo():
             "categoria": "Teste",
             "valor": 500.0,
             "validade_meses": 1,
+            "cpf": "52998224725",
         },
     )
     
@@ -653,6 +658,7 @@ def test_criar_orcamento_listar_includes_new_budget():
             "categoria": "Essencial",
             "valor": 1500.0,
             "validade_meses": 2,
+            "cpf": "52998224725",
         },
     )
     assert create_response.status_code == 201
@@ -700,6 +706,7 @@ def test_criar_orcamento_duplicate_name_400():
             "categoria": "Essencial",
             "valor": 1000.0,
             "validade_meses": 1,
+            "cpf": "52998224725",
         },
     )
     assert response.status_code == 400
@@ -729,6 +736,7 @@ def test_criar_orcamento_duplicate_name_arquivado_400():
             "categoria": "Lazer",
             "valor": 500.0,
             "validade_meses": 1,
+            "cpf": "52998224725",
         },
     )
     assert response.status_code == 400
@@ -749,6 +757,7 @@ def test_criar_orcamento_same_name_different_users_201():
             "categoria": "Essencial",
             "valor": 1000.0,
             "validade_meses": 1,
+            "cpf": "52998224725",
         },
     )
     assert response1.status_code == 201
@@ -761,6 +770,7 @@ def test_criar_orcamento_same_name_different_users_201():
             "categoria": "Essencial",
             "valor": 1500.0,
             "validade_meses": 1,
+            "cpf": "39053344705",
         },
     )
     assert response2.status_code == 201
@@ -778,6 +788,7 @@ def test_criar_orcamento_duplicate_name_mesmo_usuario_201_depois_400():
         "categoria": "Essencial",
         "valor": 1000.0,
         "validade_meses": 1,
+        "cpf": "52998224725",
     }
     first = client.post("/orcamentos/", params={"user_id": "user-123"}, json=payload)
     assert first.status_code == 201

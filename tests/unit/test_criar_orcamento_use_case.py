@@ -16,6 +16,7 @@ def test_criar_orcamento_success():
         valor=1000.0,
         validade_meses=3,
         user_id="user-123",
+        cpf="11144477735",
     )
 
     assert isinstance(budget, Budget)
@@ -44,6 +45,7 @@ def test_criar_orcamento_invalid_nome():
             valor=1000.0,
             validade_meses=3,
             user_id="user-123",
+            cpf="11144477735",
         )
 
 
@@ -57,6 +59,7 @@ def test_criar_orcamento_invalid_categoria():
             valor=1000.0,
             validade_meses=3,
             user_id="user-123",
+            cpf="11144477735",
         )
 
 
@@ -70,6 +73,7 @@ def test_criar_orcamento_invalid_valor():
             valor=0.0,
             validade_meses=3,
             user_id="user-123",
+            cpf="11144477735",
         )
     with pytest.raises(ValueError, match="valor must be positive"):
         use_case.execute(
@@ -78,6 +82,7 @@ def test_criar_orcamento_invalid_valor():
             valor=-10.0,
             validade_meses=3,
             user_id="user-123",
+            cpf="11144477735",
         )
 
 
@@ -92,6 +97,7 @@ def test_criar_orcamento_invalid_validade_meses():
                 valor=1000.0,
                 validade_meses=invalid,
                 user_id="user-123",
+                cpf="11144477735",
             )
 
 
@@ -105,6 +111,7 @@ def test_criar_orcamento_invalid_user_id():
             valor=1000.0,
             validade_meses=3,
             user_id="",
+            cpf="11144477735",
         )
 
 
@@ -117,6 +124,7 @@ def test_criar_orcamento_duplicate_name_error():
         valor=1000.0,
         validade_meses=3,
         user_id="user-123",
+        cpf="11144477735",
     )
     with pytest.raises(ValueError, match="Já existe um orçamento com este nome"):
         use_case.execute(
@@ -125,6 +133,7 @@ def test_criar_orcamento_duplicate_name_error():
             valor=2000.0,
             validade_meses=3,
             user_id="user-123",
+            cpf="11144477735",
         )
 
 
@@ -137,6 +146,7 @@ def test_criar_orcamento_duplicate_name_archived_error():
         valor=1000.0,
         validade_meses=3,
         user_id="user-123",
+        cpf="11144477735",
     )
     budget = repo.list_by_user_id("user-123", ativo=None)[0]
     budget.desativar()
@@ -147,6 +157,7 @@ def test_criar_orcamento_duplicate_name_archived_error():
             valor=2000.0,
             validade_meses=3,
             user_id="user-123",
+            cpf="11144477735",
         )
 
 
@@ -159,6 +170,7 @@ def test_criar_orcamento_same_name_different_users_success():
         valor=1000.0,
         validade_meses=3,
         user_id="user-123",
+        cpf="11144477735",
     )
     budget = use_case.execute(
         nome="Alimentação",
@@ -166,6 +178,7 @@ def test_criar_orcamento_same_name_different_users_success():
         valor=1500.0,
         validade_meses=3,
         user_id="user-456",
+        cpf="22255588846",
     )
     assert budget.user_id == "user-456"
     assert budget.nome == "Alimentação"
